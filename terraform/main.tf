@@ -15,9 +15,10 @@ resource "kubernetes_namespace" "argocd_namespace" {
 }
 
 resource "helm_release" "argocd" {
-  chart      = "argocd"
+  chart      = "argo-cd"
   name       = "argocd"
   repository = "https://argoproj.github.io/argo-helm"
+  version = "5.5.8"
 
   set {
     name  = "service.type"
