@@ -1,13 +1,3 @@
-provider "helm" {
-  kubernetes {
-    config_path = "~/.kube/config"
-  }
-}
-
-provider "kubernetes" {
-  config_path = "~/.kube/config"
-}
-
 resource "kubernetes_namespace" "argo-cd" {
   metadata {
     name = "argocd"
@@ -24,4 +14,28 @@ resource "helm_release" "argo-cd" {
     name  = "service.type"
     value = "NodePort"
   }
+}
+
+data "kubectl_file_documents" "grafana" {
+  content = file("../tools/grafana.yaml")
+}
+
+resource "kubectl_manifest" "grafana_apply" {
+  yaml_body = data.kubectl_file_documents.grafana.content
+}
+
+data "kubectl_file_documents" "nginx_controller" {
+  content = file("../tools/nginx_controller.yaml")
+}
+
+resource "kubectl_manifest" "nginx_controller_apply" {
+  yaml_body = data.kubectl_file_documents.nginx_controller.content
+}
+
+data "kubectl_file_documents" "loki" {
+  content = file("../tools/loki.yaml")
+}
+
+resource "kubectl_manifest" "loki_apply" {
+  yaml_body = data.kubectl_file_documents.loki.content
 }
