@@ -11,18 +11,18 @@ resource "helm_release" "argo-cd" {
   version = "5.5.8"
   namespace = kubernetes_namespace.argo-cd.metadata.0.name
   set {
-    name  = "service.type"
-    value = "NodePort"
+    name  = "service.argocd-server.type"
+    value = "LoadBalancer"
   }
 }
 
-data "kubectl_file_documents" "grafana" {
-  content = file("../tools/grafana.yaml")
-}
-
-resource "kubectl_manifest" "grafana_apply" {
-  yaml_body = data.kubectl_file_documents.grafana.content
-}
+#data "kubectl_file_documents" "grafana" {
+#  content = file("../tools/grafana.yaml")
+#}
+#
+#resource "kubectl_manifest" "grafana_apply" {
+#  yaml_body = data.kubectl_file_documents.grafana.content
+#}
 
 data "kubectl_file_documents" "nginx_controller" {
   content = file("../tools/nginx_controller.yaml")
