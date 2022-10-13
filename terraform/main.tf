@@ -11,7 +11,7 @@ resource "helm_release" "argo-cd" {
   version = "5.5.8"
   namespace = kubernetes_namespace.argo-cd.metadata.0.name
   set {
-    name  = "service.argocd-server.type"
+    name  = "server.service.type"
     value = "LoadBalancer"
   }
 }
