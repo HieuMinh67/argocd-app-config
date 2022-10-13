@@ -1,19 +1,25 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: loki
+  name: loki-stack
   namespace: argocd
 spec:
   project: default
   source:
     repoURL: https://grafana.github.io/helm-charts
-    targetRevision: 3.2.1
-    chart: loki
+    targetRevision: 2.8.3
+    chart: loki-stack
     helm:
       parameters:
         -
-          name: "service.type"
-          value: "LoadBalancer"
+          name: "grafana.enabled=true"
+          value: "true"
+        -
+          name: "prometheus.enabled=true"
+          value: "true"
+        -
+          name: "grafana.enabled=true"
+          value: "true"
   destination:
     namespace: monitoring
     server: https://kubernetes.default.svc
