@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: myapp-argo-application
+  name: todo-app
   namespace: argocd
 spec:
   project: default
@@ -9,7 +9,7 @@ spec:
   source:
     repoURL: https://github.com/HieuMinh67/argocd-app-config.git
     targetRevision: HEAD
-    path: dev
+    path: helm/todo-app
   destination: 
     server: https://kubernetes.default.svc
     namespace: myapp
