@@ -16,18 +16,67 @@ resource "helm_release" "argo-cd" {
   }
 }
 
-data "kubectl_file_documents" "nginx_controller" {
-  content = file("../tools/nginx_controller.yaml")
+resource "helm_release" "argocd-image-updater" {
+  chart = "argocd-image-updater"
+  name  = "argocd-image-updater"
+  repository = "https://argoproj.github.io/argo-helm"
+
+  version = "0.12.0"
+  namespace = kubernetes_namespace.argo-cd.metadata.0.name
 }
 
-resource "kubectl_manifest" "nginx_controller_apply" {
-  yaml_body = data.kubectl_file_documents.nginx_controller.content
+resource "kubernetes_namespace" "monitoring" {
+  metadata {
+    name = "monitoring"
+  }
 }
 
-data "kubectl_file_documents" "loki" {
-  content = file("../tools/loki.yaml")
+resource "helm_release" "loki-stack" {
+  chart = "loki-stack"
+  name  = "loki-stack"
+  repository = "https://grafana.github.io/helm-charts"
+
+  version = "2.8.3"
+  namespace = kubernetes_namespace.monitoring.metadata.0.name
+
+  set {
+    name  = "grafana.enabled"
+    value = "true"
+  }
+
+  set {
+    name  = "prometheus.enabled"
+    value = "true"
+  }
+
+  set {
+    name  = "prometheus.server.persistentVolume.enabled"
+    value = "false"
+  }
+
+  set {
+    name  = "prometheus.alertmanager.persistentVolume.enabled"
+    value = "false"
+  }
+
+  set {
+    name  = "grafana.service.type"
+    value = "LoadBalancer"
+  }
 }
 
-resource "kubectl_manifest" "loki_apply" {
-  yaml_body = data.kubectl_file_documents.loki.content
-}
+#data "kubectl_file_documents" "nginx_controller" {
+#  content = file("../tools/nginx_controller.yaml")
+#}
+#
+#resource "kubectl_manifest" "nginx_controller_apply" {
+#  yaml_body = data.kubectl_file_documents.nginx_controller.content
+#}
+
+#data "kubectl_file_documents" "loki" {
+#  content = file("../tools/loki.yaml")
+#}
+#
+#resource "kubectl_manifest" "loki_apply" {
+#  yaml_body = data.kubectl_file_documents.loki.content
+#}
