@@ -8,7 +8,7 @@ image:
   repository: hieupham0607/todo-app
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: 2a3327b0a1cf58dc12ae6f25f45be0fe183688e3
+  tag: 8a767ad906ccfafb4c125ea47621952b5c7b392b
 
 imagePullSecrets: []
 nameOverride: ""
