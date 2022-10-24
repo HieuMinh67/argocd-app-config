@@ -21,7 +21,7 @@ resource "helm_release" "argocd-image-updater" {
   name  = "argocd-image-updater"
   repository = "https://argoproj.github.io/argo-helm"
 
-  version = "0.12.0"
+  version = "0.8.1"
   namespace = kubernetes_namespace.argo-cd.metadata.0.name
 }
 
@@ -63,6 +63,15 @@ resource "helm_release" "loki-stack" {
     name  = "grafana.service.type"
     value = "LoadBalancer"
   }
+}
+
+
+data "kubectl_file_documents" "todo-app" {
+  content = file("../nginx_controller.yaml")
+}
+
+resource "kubectl_manifest" "nginx_controller_apply" {
+  yaml_body = data.kubectl_file_documents.todo-app.content
 }
 
 #data "kubectl_file_documents" "nginx_controller" {
