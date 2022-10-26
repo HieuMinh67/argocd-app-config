@@ -67,7 +67,7 @@ resource "helm_release" "loki-stack" {
 
 
 data "kubectl_file_documents" "todo-app" {
-  content = file("../nginx_controller.yaml")
+  content = file("../application.yaml")
 }
 
 resource "kubectl_manifest" "nginx_controller_apply" {
