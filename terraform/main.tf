@@ -45,6 +45,11 @@ resource "helm_release" "loki-stack" {
   }
 
   set {
+    name  = "grafana.image.tag"
+    value = "9.2.2"
+  }
+
+  set {
     name  = "prometheus.enabled"
     value = "true"
   }
@@ -70,7 +75,8 @@ data "kubectl_file_documents" "todo-app" {
   content = file("../application.yaml")
 }
 
-resource "kubectl_manifest" "nginx_controller_apply" {
+resource "kubectl_manifest" "todo-app_apply" {
+  depends_on = [data.kubectl_file_documents.todo-app]
   yaml_body = data.kubectl_file_documents.todo-app.content
 }
 
