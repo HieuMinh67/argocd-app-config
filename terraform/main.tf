@@ -49,7 +49,7 @@ resource "kubectl_manifest" "loki_apply" {
 }
 
 resource "kubectl_manifest" "loki_configmap_apply" {
-  yaml_body = file("${path.module}/tools/loki_dasboard.yaml")
+  yaml_body = file("${path.module}/tools/loki_dashboard.yaml")
 }
 
 resource "kubectl_manifest" "prom_configmap_apply" {
