@@ -78,7 +78,7 @@ resource "kubernetes_config_map" "prom_configmap_apply" {
 
 resource "kubernetes_manifest" "loki_configmap_apply" {
   manifest = yamldecode(templatefile("${path.module}/templates/loki_configmap.yaml", {
-    name      = "grafana-cluster-dashboard"
+    name      = "grafana-log-dashboard"
     data      = file("${path.module}/tools/loki_dashboard.json")
   }))
 }
