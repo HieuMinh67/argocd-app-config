@@ -7,10 +7,17 @@ spec:
   project: default
   source:
     repoURL: https://grafana.github.io/helm-charts
-    targetRevision: 6.40.3
+    targetRevision: 9.1.7
     chart: grafana
+    helm:
+      parameters:
+        -
+          name: "service.type"
+          value: "LoadBalancer"
+        -
+          name: ""
   destination:
-    namespace: ingress-nginx
+    namespace: monitoring
     server: https://kubernetes.default.svc
   syncPolicy:
     syncOptions:

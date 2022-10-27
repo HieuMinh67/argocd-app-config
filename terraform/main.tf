@@ -31,53 +31,9 @@ resource "kubernetes_namespace" "monitoring" {
   }
 }
 
-resource "helm_release" "loki-stack" {
-  chart = "loki-stack"
-  name  = "loki-stack"
-  repository = "https://grafana.github.io/helm-charts"
-
-  version = "2.8.3"
-  namespace = kubernetes_namespace.monitoring.metadata.0.name
-
-  set {
-    name  = "grafana.enabled"
-    value = "true"
-  }
-
-  set {
-    name  = "grafana.image.tag"
-    value = "9.2.2"
-  }
-
-  set {
-    name  = "prometheus.enabled"
-    value = "true"
-  }
-
-  set {
-    name  = "prometheus.server.persistentVolume.enabled"
-    value = "false"
-  }
-
-  set {
-    name  = "prometheus.alertmanager.persistentVolume.enabled"
-    value = "false"
-  }
-
-  set {
-    name  = "grafana.service.type"
-    value = "LoadBalancer"
-  }
-}
-
-
-data "kubectl_file_documents" "todo-app" {
-  content = file("../application.yaml")
-}
 
 resource "kubectl_manifest" "todo-app_apply" {
-  depends_on = [data.kubectl_file_documents.todo-app]
-  yaml_body = data.kubectl_file_documents.todo-app.content
+  yaml_body = file("../application.yaml")
 }
 
 #data "kubectl_file_documents" "nginx_controller" {
@@ -88,10 +44,6 @@ resource "kubectl_manifest" "todo-app_apply" {
 #  yaml_body = data.kubectl_file_documents.nginx_controller.content
 #}
 
-#data "kubectl_file_documents" "loki" {
-#  content = file("../tools/loki.yaml")
-#}
-#
-#resource "kubectl_manifest" "loki_apply" {
-#  yaml_body = data.kubectl_file_documents.loki.content
-#}
+resource "kubectl_manifest" "loki_apply" {
+  yaml_body = file("${path.module}/tools/loki.yaml")
+}
