@@ -58,7 +58,7 @@ resource "kubernetes_config_map" "loki_configmap_apply" {
   }
 
   data = {
-    "log-dashboard.json" = file("${path.module}/tools/loki_dashboard.yaml")
+    "log-dashboard.json" = file("${path.module}/tools/loki_dashboard.json")
   }
 }
 
@@ -67,11 +67,11 @@ resource "kubernetes_config_map" "prom_configmap_apply" {
     name = "grafana-cluster-dashboard"
     namespace = "monitoring"
     labels = {
-      grafana_dashboard = "2"
+      grafana_dashboard = ""
     }
   }
 
   data = {
-    "grafana-cluster-dashboard" = file("${path.module}/tools/prometheus_dashboard.yaml")
+    "grafana-cluster-dashboard" = file("${path.module}/tools/prometheus_dashboard.json")
   }
 }
