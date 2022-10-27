@@ -4,7 +4,7 @@ metadata:
   labels:
     grafana_dashboard: "1"
   name: grafana-log-dashboard
-  namespace:
+  namespace: monitoring
 data:
   log-dashboard.json: |-
     {
