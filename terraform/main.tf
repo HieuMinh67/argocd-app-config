@@ -48,10 +48,30 @@ resource "kubectl_manifest" "loki_apply" {
   yaml_body = file("${path.module}/tools/loki.yaml")
 }
 
-resource "kubectl_manifest" "loki_configmap_apply" {
-  yaml_body = file("${path.module}/tools/loki_dashboard.yaml")
+resource "kubernetes_config_map" "loki_configmap_apply" {
+  metadata {
+    name = "grafana-log-dashboard"
+    namespace = "monitoring"
+    labels = {
+      grafana_dashboard = "1"
+    }
+  }
+
+  data = {
+    "log-dashboard.json" = file("${path.module}/tools/loki_dashboard.yaml")
+  }
 }
 
-resource "kubectl_manifest" "prom_configmap_apply" {
-  yaml_body = file("${path.module}/tools/prometheus_dashboard.yaml")
+resource "kubernetes_config_map" "prom_configmap_apply" {
+  metadata {
+    name = "grafana-cluster-dashboard"
+    namespace = "monitoring"
+    labels = {
+      grafana_dashboard = "2"
+    }
+  }
+
+  data = {
+    "grafana-cluster-dashboard" = file("${path.module}/tools/prometheus_dashboard.yaml")
+  }
 }
