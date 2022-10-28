@@ -13,6 +13,7 @@ resource "helm_release" "argo-cd" {
 }
 
 resource "null_resource" "port-forwarding" {
+  depends_on = [helm_release.argo-cd, kubectl_manifest.loki_apply]
   provisioner "argo-cd" {
     command = "kubectl port-forward svc/argocd-server -n argocd 8080:443"
   }
