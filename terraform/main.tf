@@ -10,9 +10,15 @@ resource "helm_release" "argo-cd" {
   repository = "https://argoproj.github.io/argo-helm"
   version = "5.5.8"
   namespace = kubernetes_namespace.argo-cd.metadata.0.name
-  set {
-    name  = "server.service.type"
-    value = "LoadBalancer"
+}
+
+resource "null_resource" "port-forwarding" {
+  provisioner "argo-cd" {
+    command = "kubectl port-forward svc/argocd-server -n argocd 8080:443"
+  }
+
+  provisioner "grafana" {
+    command = "kubectl port-forward svc/loki-stack-grafana -n monitoring 8081:80"
   }
 }
 
@@ -79,6 +85,7 @@ resource "kubernetes_config_map" "prom_configmap_apply" {
 resource "kubernetes_manifest" "loki_configmap_apply" {
   manifest = yamldecode(templatefile("${path.module}/tools/configmap.yaml", {
     name      = "grafana-log-dashboard"
+    filename  = "loki_dashboard"
     data      = file("${path.module}/tools/loki_dashboard.json")
   }))
 }
