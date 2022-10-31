@@ -12,16 +12,16 @@ resource "helm_release" "argo-cd" {
   namespace = kubernetes_namespace.argo-cd.metadata.0.name
 }
 
-resource "null_resource" "port-forwarding" {
-  depends_on = [helm_release.argo-cd, kubectl_manifest.loki_apply]
-  provisioner "argo-cd" {
-    command = "kubectl port-forward svc/argocd-server -n argocd 8080:443"
-  }
-
-  provisioner "grafana" {
-    command = "kubectl port-forward svc/loki-stack-grafana -n monitoring 8081:80"
-  }
-}
+#resource "null_resource" "port-forwarding" {
+#  depends_on = [helm_release.argo-cd, kubectl_manifest.loki_apply]
+#  provisioner "argo-cd" {
+#    command = "kubectl port-forward svc/argocd-server -n argocd 8080:443"
+#  }
+#
+#  provisioner "grafana" {
+#    command = "kubectl port-forward svc/loki-stack-grafana -n monitoring 8081:80"
+#  }
+#}
 
 resource "helm_release" "argocd-image-updater" {
   chart = "argocd-image-updater"
@@ -70,6 +70,7 @@ resource "kubectl_manifest" "loki_apply" {
 #}
 
 resource "kubernetes_config_map" "prom_configmap_apply" {
+  depends_on = [helm_release.argo-cd]
   metadata {
     name = "grafana-cluster-dashboard"
     namespace = "monitoring"
