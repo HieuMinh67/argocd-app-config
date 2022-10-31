@@ -10,6 +10,11 @@ resource "helm_release" "argo-cd" {
   repository = "https://argoproj.github.io/argo-helm"
   version = "5.5.8"
   namespace = kubernetes_namespace.argo-cd.metadata.0.name
+
+  set {
+    name  = "server.service.annotations.service\\.beta\\.kubernetes\\.io/aws-load-balancer-internal"
+    value = "true"
+  }
 }
 
 #resource "null_resource" "port-forwarding" {
