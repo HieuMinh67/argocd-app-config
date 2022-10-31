@@ -11,9 +11,9 @@ spec:
     chart: loki-stack
     helm:
       parameters:
-        -
-          name: "grafana.enabled"
-          value: "true"
+#        -
+#          name: "grafana.enabled"
+#          value: "true"
         -
           name: "prometheus.enabled"
           value: "true"
@@ -23,12 +23,15 @@ spec:
         -
           name: "prometheus.alertmanager.persistentVolume.enabled"
           value: "false"
-#        -
+        -
 #          name: "grafana.service.type"
 #          value: "LoadBalancer"
-        -
-          name: "grafana.image.tag"
-          value: "9.2.2"
+#        -
+#          name: "grafana.service.annotations.service\\.beta\\.kubernetes\\.io/aws-load-balancer-internal"
+#          value: "true"
+#        -
+#          name: "grafana.image.tag"
+#          value: "9.2.2"
   destination:
     namespace: monitoring
     server: https://kubernetes.default.svc
