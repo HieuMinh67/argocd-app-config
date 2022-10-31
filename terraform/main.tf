@@ -12,6 +12,11 @@ resource "helm_release" "argo-cd" {
   namespace = kubernetes_namespace.argo-cd.metadata.0.name
 
   set {
+    name  = "server.service.type"
+    value = "LoadBalancer"
+  }
+
+  set {
     name  = "server.service.annotations.service\\.beta\\.kubernetes\\.io/aws-load-balancer-internal"
     value = "true"
   }
@@ -48,31 +53,9 @@ resource "kubectl_manifest" "todo-app_apply" {
   yaml_body = file("../application.yaml")
 }
 
-#data "kubectl_file_documents" "nginx_controller" {
-#  content = file("../tools/nginx_controller.yaml")
-#}
-#
-#resource "kubectl_manifest" "nginx_controller_apply" {
-#  yaml_body = data.kubectl_file_documents.nginx_controller.content
-#}
-
 resource "kubectl_manifest" "loki_apply" {
   yaml_body = file("${path.module}/tools/loki.yaml")
 }
-
-#resource "kubernetes_config_map" "loki_configmap_apply" {
-#  metadata {
-#    name = "grafana-log-dashboard"
-#    namespace = "monitoring"
-#    labels = {
-#      grafana_dashboard = "1"
-#    }
-#  }
-#
-#  data = {
-#    "log-dashboard.json" = file("${path.module}/tools/loki_dashboard.json")
-#  }
-#}
 
 resource "kubernetes_config_map" "prom_configmap_apply" {
   depends_on = [helm_release.argo-cd]
