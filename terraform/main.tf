@@ -46,9 +46,9 @@ resource "kubectl_manifest" "loki" {
   yaml_body = file("${path.module}/tools/loki.yaml")
 }
 
-resource "kubectl_manifest" "grafana" {
-  yaml_body = file("${path.module}/tools/grafana.yaml")
-}
+#resource "kubectl_manifest" "grafana" {
+#  yaml_body = file("${path.module}/tools/grafana.yaml")
+#}
 
 resource "kubernetes_config_map" "prom_configmap_apply" {
   depends_on = [helm_release.argo-cd]
