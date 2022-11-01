@@ -16,7 +16,7 @@ spec:
           value: "LoadBalancer"
         -
           name: "service.annotations.service\\.beta\\.kubernetes\\.io/aws-load-balancer-internal"
-          value: "true"
+          value: "1"
   destination:
     namespace: monitoring
     server: https://kubernetes.default.svc
