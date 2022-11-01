@@ -23,7 +23,7 @@ spec:
         -
           name: "prometheus.alertmanager.persistentVolume.enabled"
           value: "false"
-        -
+#        -
 #          name: "grafana.service.type"
 #          value: "LoadBalancer"
 #        -
