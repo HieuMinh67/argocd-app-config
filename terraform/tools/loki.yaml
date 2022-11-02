@@ -10,8 +10,24 @@ spec:
     targetRevision: 2.8.4
     chart: loki-stack
     helm:
-      valueFiles:
-        - loki-values.yaml
+      value: |
+        grafana:
+          enabled: "true"
+          image:
+            tag: "9.2.2"
+          service:
+            type: "LoadBalancer"
+          annotations:
+            service.beta.kubernetes.io/aws-load-balancer-internal: "true"
+
+        prometheus:
+          enabled: "true"
+          server:
+            persistentVolume:
+              enabled: "false"
+          alertmanager:
+            persistentVolume:
+              enabled: "false"
   destination:
     namespace: monitoring
     server: https://kubernetes.default.svc
