@@ -10,7 +10,7 @@ spec:
     targetRevision: 2.8.4
     chart: loki-stack
     helm:
-      value: |
+      values: |
         grafana:
           enabled: "true"
           image:
