@@ -61,7 +61,7 @@ resource "kubernetes_config_map" "prom_configmap_apply" {
   }
 
   data = {
-    "grafana-cluster-dashboard" = file("${path.module}/tools/prometheus_dashboard.json")
+    "grafana-cluster-dashboard" = file("${path.module}/tools/dashboards/prometheus.json")
   }
 }
 
@@ -69,6 +69,6 @@ resource "kubernetes_manifest" "loki_configmap_apply" {
   manifest = yamldecode(templatefile("${path.module}/tools/configmap.yaml", {
     name      = "grafana-log-dashboard"
     filename  = "loki_dashboard"
-    data      = file("${path.module}/tools/loki_dashboard.json")
+    data      = file("${path.module}/tools/dashboards/loki.json")
   }))
 }
