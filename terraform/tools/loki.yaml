@@ -38,7 +38,6 @@ spec:
                   file: dashboards/loki.json
                 prometheus:
                   file: dashboards/prometheus.json
-              
 
         prometheus:
           enabled: "true"
