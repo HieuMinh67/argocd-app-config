@@ -13,6 +13,7 @@ spec:
       valuesFiles:
       - values.yaml
   destination:
+    path: helm/monitoring/software
     namespace: monitoring
     server: {{ .Values.spec.destination.server }}
   syncPolicy:
