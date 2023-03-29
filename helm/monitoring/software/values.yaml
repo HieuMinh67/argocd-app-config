@@ -1,0 +1,36 @@
+grafana:
+  enabled: "true"
+  image:
+    tag: "9.2.2"
+  service:
+    type: "LoadBalancer"
+    annotations:
+      service.beta.kubernetes.io/aws-load-balancer-internal: "true"
+  dashboardProviders:
+    dashboardproviders.yaml:
+      apiVersion: 1
+      providers:
+      - name: 'default'
+        orgId: 1
+        folder: ''
+        type: file
+        disableDeletion: false
+        editable: true
+        options:
+          path: /var/lib/grafana/dashboards/default
+
+    dashboards:
+      default:
+        loki:
+          file: dashboards/loki.json
+        prometheus:
+          file: dashboards/prometheus.json
+
+prometheus:
+  enabled: "true"
+  server:
+    persistentVolume:
+      enabled: "false"
+  alertmanager:
+    persistentVolume:
+      enabled: "false"

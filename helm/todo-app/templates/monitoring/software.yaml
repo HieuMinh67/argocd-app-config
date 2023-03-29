@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: loki-stack
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: {{ .Values.spec.source.repoURL }}
+    targetRevision: 2.8.4
+    chart: loki-stack
+    helm:
+      valuesFiles:
+      - values.yaml
+  destination:
+    namespace: monitoring
+    server: {{ .Values.spec.destination.server }}
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
+
+    automated:
+      selfHeal: true
+      prune: true
+

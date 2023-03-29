@@ -80,3 +80,12 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    cicd: https://kubernetes.default.svc
+  source:
+    repoURL: https://github.com/HieuMinh67/argocd-app-config.git
+    targetRevision: HEAD
+
