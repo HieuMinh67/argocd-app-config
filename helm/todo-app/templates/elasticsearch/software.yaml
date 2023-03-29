@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: elasticsearch
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: {{ .Values.spec.source.repoURL }}
+    targetRevision: 8.5.1
+    chart: elasticsearch
+    helm:
+      valuesFiles:
+      - values.yaml
+  destination:
+    namespace: elasticsearch
+    path: helm/elasticseach/software
+    server: {{ .Values.spec.destination.server }}
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
+
+    automated:
+      selfHeal: true
+      prune: true
